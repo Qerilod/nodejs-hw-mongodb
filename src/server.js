@@ -30,14 +30,25 @@ const setupServer = () => {
   });
 
   app.get('/contacts', async (req, res) => {
-    const contacts = await getAllContacts();
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully found contacts!',
-      data: contacts,
-    });
+    try {
+      const contacts = await getAllContacts();
+      if (!contacts || contacts.length === 0) {
+        return res.status(404).json({
+          message: 'Contacts not found',
+        });
+      }
+      res.status(200).json({
+        status: 200,
+        message: 'Successfully found contacts!',
+        data: contacts,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Server error. Unable to retrieve contacts.',
+        error: error.message,
+      });
+    }
   });
-
   app.get('/contacts/:contactId', async (req, res) => {
     const { contactId } = req.params;
     const contact = await getContactById(contactId);
