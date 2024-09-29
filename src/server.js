@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { ENV_VARS } from './utils/constants.js';
 import { env } from './utils/env.js';
-import contactsRouter from './routers/contacts.js';
+import router from './routers/contacts.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
@@ -24,7 +24,7 @@ const setupServer = () => {
   app.use(cors());
   app.use(express.json());
 
-  app.use('/contacts', contactsRouter);
+  app.use('/contacts', router);
 
   app.use(notFoundHandler);
 
