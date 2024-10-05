@@ -1,9 +1,16 @@
 import Joi from 'joi';
-export const contactSchema = Joi.object({
+
+export const postSchema = Joi.object({
   name: Joi.string().min(3).max(20).required(),
-  email: Joi.string().email().required(),
+  email: Joi.string().email(),
   phone: Joi.string().min(3).max(20).required(),
 });
+
+export const patchSchema = Joi.object({
+  name: Joi.string().min(3).max(20),
+  email: Joi.string().email(),
+  phone: Joi.string().min(3).max(20),
+}).min(1);
 
 export const validateBody = (schema) => {
   return (req, res, next) => {

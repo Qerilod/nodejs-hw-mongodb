@@ -7,7 +7,11 @@ import {
   deleteContactController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { validateBody, contactSchema } from '../middlewares/validateBody.js';
+import {
+  validateBody,
+  patchSchema,
+  postSchema,
+} from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
 
 const router = express.Router();
@@ -17,14 +21,14 @@ router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 
 router.post(
   '/',
-  validateBody(contactSchema),
+  validateBody(postSchema),
   ctrlWrapper(createContactController),
 );
 
 router.patch(
   '/:contactId',
   isValidId,
-  validateBody(contactSchema),
+  validateBody(patchSchema),
   ctrlWrapper(updateContactController),
 );
 
