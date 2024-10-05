@@ -83,8 +83,8 @@ export const getContactByIdController = async (req, res, next) => {
 export const createContactController = async (req, res, next) => {
   const { name, phoneNumber, email, isFavourite, contactType } = req.body;
 
-  if (!name || !phoneNumber || !contactType) {
-    throw createError(400, 'Name, phone number, and contact type are required');
+  if (!name || !phoneNumber) {
+    throw createError(400, 'Name or phonenumber are required');
   }
 
   const newContact = await createContact({
