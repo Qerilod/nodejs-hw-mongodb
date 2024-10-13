@@ -81,25 +81,30 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res, next) => {
-  const { name, phoneNumber, email, isFavourite, contactType } = req.body;
+  try {
+    const { name, phoneNumber, email, isFavourite, contactType } = req.body;
+    const userId = req.user._id;
 
-  if (!name || !phoneNumber) {
-    throw createError(400, 'Name or phonenumber are required');
+    if (!name || !phoneNumber) {
+      throw createError(400, 'Name or phonenumber are required');
+    }
+    const newContact = await createContact({
+      name,
+      phoneNumber,
+      email,
+      isFavourite,
+      contactType,
+      userId,
+    });
+
+    res.status(201).json({
+      status: 201,
+      message: 'Successfully created a contact!',
+      data: newContact,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  const newContact = await createContact({
-    name,
-    phoneNumber,
-    email,
-    isFavourite,
-    contactType,
-  });
-
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully created a contact!',
-    data: newContact,
-  });
 };
 
 export const updateContactController = async (req, res, next) => {

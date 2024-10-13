@@ -1,15 +1,16 @@
 import { contactsModel } from '../db/models/contact.js';
 
-export const getAllContacts = async (page, perPage) => {
+export const getAllContacts = async (userId, page, perPage) => {
   const skip = (page - 1) * perPage;
-  return await contactsModel.find().skip(skip).limit(perPage);
-};
-export const getAllContactsCount = async () => {
-  return await contactsModel.countDocuments();
+  return await contactsModel.find({ userId }).skip(skip).limit(perPage);
 };
 
-export const getContactById = async (contactId) => {
-  return await contactsModel.findById(contactId);
+export const getAllContactsCount = async (userId) => {
+  return await contactsModel.countDocuments({ userId });
+};
+
+export const getContactById = async (userId, contactId) => {
+  return await contactsModel.findOne({ _id: contactId, userId });
 };
 
 export const createContact = async (contactData) => {
@@ -18,16 +19,19 @@ export const createContact = async (contactData) => {
   return newContact;
 };
 
-export const updateContact = async (contactId, updateData) => {
-  const updatedContact = await contactsModel.findByIdAndUpdate(
-    contactId,
+export const updateContact = async (userId, contactId, updateData) => {
+  const updatedContact = await contactsModel.findOneAndUpdate(
+    { _id: contactId, userId },
     updateData,
     { new: true },
   );
   return updatedContact;
 };
 
-export const deleteContact = async (contactId) => {
-  const deletedContact = await contactsModel.findByIdAndDelete(contactId);
+export const deleteContact = async (userId, contactId) => {
+  const deletedContact = await contactsModel.findOneAndDelete({
+    _id: contactId,
+    userId,
+  });
   return deletedContact;
 };

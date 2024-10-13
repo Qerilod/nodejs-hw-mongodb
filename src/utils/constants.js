@@ -7,4 +7,5 @@ export const MONGO_DB_VARS = {
   MONGO_USER: 'MONGO_USER',
   MONGO_URL: 'MONGO_URL',
   MONGO_DB: 'MONGO_DB',
+  // SECRET_KEY: 'SECRET_KEY',
 };
