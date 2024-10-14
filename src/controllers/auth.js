@@ -32,7 +32,8 @@ export const loginController = async (req, res, next) => {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
@@ -53,7 +54,7 @@ export const refreshSessionController = async (req, res, next) => {
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) {
-      throw createError(401, 'Refresh token is missing');
+      throw createError(401, 'You are logged out, please log in again!');
     }
 
     const { accessToken } = await refreshSession(refreshToken);
@@ -75,7 +76,7 @@ export const logoutController = async (req, res, next) => {
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) {
-      throw createError(401, 'Refresh token is missing');
+      throw createError(401, 'You are logged out, please log in again!');
     }
 
     await logoutUser(refreshToken);

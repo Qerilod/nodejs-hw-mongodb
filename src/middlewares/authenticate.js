@@ -9,11 +9,11 @@ export const authenticate = async (req, res, next) => {
       throw createError(401, 'Authorization header is missing');
     }
 
-    const token = authHeader.split(' ')[1];
-
-    if (!token) {
-      throw createError(401, 'Access token is missing');
+    const tokenParts = authHeader.split(' ');
+    if (tokenParts.length !== 2 || tokenParts[0] !== 'Bearer') {
+      throw createError(401, 'Authorization format is "Bearer [token]"');
     }
+    const token = tokenParts[1];
 
     const session = await Session.findOne({ accessToken: token });
 

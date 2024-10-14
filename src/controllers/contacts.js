@@ -10,6 +10,7 @@ import {
 
 export const getAllContactsController = async (req, res, next) => {
   try {
+    const { userId } = req;
     const {
       page = 1,
       perPage = 5,
@@ -22,6 +23,18 @@ export const getAllContactsController = async (req, res, next) => {
     const currentPage = parseInt(page);
     const itemsPerPage = parseInt(perPage);
 
+    if (isNaN(currentPage) || currentPage <= 0) {
+      return res
+        .status(400)
+        .json({ message: 'Page must be a positive number' });
+    }
+
+    if (isNaN(itemsPerPage) || itemsPerPage <= 0) {
+      return res
+        .status(400)
+        .json({ message: 'perPage must be a positive number' });
+    }
+
     const filter = {};
 
     if (type) {
@@ -32,8 +45,9 @@ export const getAllContactsController = async (req, res, next) => {
       filter.isFavourite = isFavourite === 'true';
     }
 
-    const totalItems = await getAllContactsCount();
+    const totalItems = await getAllContactsCount(userId);
     const contacts = await getAllContacts(
+      userId,
       currentPage,
       itemsPerPage,
       sortBy,
@@ -66,18 +80,28 @@ export const getAllContactsController = async (req, res, next) => {
     next(error);
   }
 };
-
 export const getContactByIdController = async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await getContactById(contactId);
-  if (!contact) {
-    throw createError(404, 'Contact not found');
+  try {
+    const { contactId } = req.params;
+    const { userId } = req;
+
+    if (!contactId) {
+      return res.status(400).json({ message: 'Contact ID is required' });
+    }
+
+    const contact = await getContactById(userId, contactId);
+    if (!contact) {
+      throw createError(404, 'Contact not found');
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: `Successfully found contact with id ${contactId}!`,
+      data: contact,
+    });
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({
-    status: 200,
-    message: `Successfully found contact with id ${contactId}!`,
-    data: contact,
-  });
 };
 
 export const createContactController = async (req, res, next) => {
@@ -108,30 +132,50 @@ export const createContactController = async (req, res, next) => {
 };
 
 export const updateContactController = async (req, res, next) => {
-  const { contactId } = req.params;
-  const updateData = req.body;
+  try {
+    const { contactId } = req.params;
+    const updateData = req.body;
+    const userId = req.user._id;
 
-  const updatedContact = await updateContact(contactId, updateData);
+    if (!contactId) {
+      return res.status(400).json({ message: 'Contact ID is required' });
+    }
 
-  if (!updatedContact) {
-    throw createError(404, 'Contact not found');
+    if (!updateData || Object.keys(updateData).length === 0) {
+      return res.status(400).json({ message: 'No data provided for update' });
+    }
+
+    const updatedContact = await updateContact(userId, contactId, updateData);
+
+    if (!updatedContact) {
+      throw createError(404, 'Contact not found');
+    }
+
+    res.status(200).json({
+      status: 200,
+      message: 'Successfully patched a contact!',
+      data: updatedContact,
+    });
+  } catch (error) {
+    next(error);
   }
-
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully patched a contact!',
-    data: updatedContact,
-  });
 };
-
 export const deleteContactController = async (req, res, next) => {
-  const { contactId } = req.params;
+  try {
+    const { contactId } = req.params;
+    const { userId } = req;
 
-  const deletedContact = await deleteContact(contactId);
+    if (!contactId) {
+      return res.status(400).json({ message: 'Contact ID is required' });
+    }
 
-  if (!deletedContact) {
-    throw createError(404, 'Contact not found');
+    const deletedContact = await deleteContact(userId, contactId);
+    if (!deletedContact) {
+      throw createError(404, 'Contact not found');
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    next(error);
   }
-
-  res.status(204).send();
 };
