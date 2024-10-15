@@ -26,7 +26,7 @@ const setupServer = () => {
   app.use(express.json());
   app.use(cookieParser());
   app.use('/contacts', router);
-  app.use('/users', routerAuth);
+  app.use('/auth', routerAuth);
   app.use(notFoundHandler);
 
   app.use(errorHandler);
