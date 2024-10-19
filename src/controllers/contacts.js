@@ -7,6 +7,7 @@ import {
   deleteContact,
   getAllContactsCount,
 } from '../services/contacts.js';
+import { cloudinary } from '../middlewares/cloudinaryConfig.js';
 
 export const getAllContactsController = async (req, res, next) => {
   try {
@@ -112,6 +113,13 @@ export const createContactController = async (req, res, next) => {
     if (!name || !phoneNumber) {
       throw createError(400, 'Name or phonenumber are required');
     }
+    let photoUrl = null;
+
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      photoUrl = result.secure_url;
+    }
+
     const newContact = await createContact({
       name,
       phoneNumber,
@@ -119,6 +127,7 @@ export const createContactController = async (req, res, next) => {
       isFavourite,
       contactType,
       userId,
+      photo: photoUrl,
     });
 
     res.status(201).json({
@@ -144,7 +153,10 @@ export const updateContactController = async (req, res, next) => {
     if (!updateData || Object.keys(updateData).length === 0) {
       return res.status(400).json({ message: 'No data provided for update' });
     }
-
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path);
+      updateData.photo = result.secure_url;
+    }
     const updatedContact = await updateContact(userId, contactId, updateData);
 
     if (!updatedContact) {

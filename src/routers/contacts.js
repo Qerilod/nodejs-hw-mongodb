@@ -15,6 +15,7 @@ import {
 } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/cloudinaryConfig.js';
 
 const router = express.Router();
 
@@ -25,12 +26,14 @@ router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 
 router.post(
   '/',
+  upload.single('photo'),
   validateBody(postSchema),
   ctrlWrapper(createContactController),
 );
 
 router.patch(
   '/:contactId',
+  upload.single('photo'),
   isValidId,
   validateBody(patchSchema),
   ctrlWrapper(updateContactController),
