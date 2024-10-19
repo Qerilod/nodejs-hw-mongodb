@@ -84,8 +84,9 @@ export const getAllContactsController = async (req, res, next) => {
 export const getContactByIdController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const { userId } = req;
-
+    ///////
+    const { userId } = req.user._id;
+    //////
     if (!contactId) {
       return res.status(400).json({ message: 'Contact ID is required' });
     }
@@ -175,8 +176,9 @@ export const updateContactController = async (req, res, next) => {
 export const deleteContactController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const { userId } = req;
-
+    //////
+    const { userId } = req.user._id;
+    /////
     if (!contactId) {
       return res.status(400).json({ message: 'Contact ID is required' });
     }
