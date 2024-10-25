@@ -1,0 +1,50 @@
+summary: Update contact by ID
+operationId: updateContact
+tags:
+  - Contacts
+description: This endpoint allows you to update contact information by ID.
+security:
+  - bearerAuth: []
+parameters:
+  - name: id
+    in: path
+    required: true
+    description: The ID of the contact to update
+    schema:
+      type: string
+requestBody:
+  description: Contact data to update
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '#./components/schemas/ContactInput'
+responses:
+  200:
+    description: Contact successfully updated
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully updated contact!'
+            data:
+              $ref: '#./components/schemas/Contact'
+  404:
+    description: Contact not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: 'Contact not found'

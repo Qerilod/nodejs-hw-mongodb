@@ -9,6 +9,11 @@ import router from './routers/contacts.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import cookieParser from 'cookie-parser';
+import fs from 'node:fs';
+import swaggerUi from 'swagger-ui-express';
+const swagger = JSON.parse(
+  fs.readFileSync(new URL('../swagger.json', import.meta.url)),
+);
 const setupServer = () => {
   dotenv.config();
 
@@ -27,10 +32,10 @@ const setupServer = () => {
   app.use(cookieParser());
   app.use('/contacts', router);
   app.use('/auth', routerAuth);
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swagger));
   app.use(notFoundHandler);
 
   app.use(errorHandler);
-
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });

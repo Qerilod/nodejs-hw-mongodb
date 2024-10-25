@@ -1,0 +1,22 @@
+components:
+responses:
+  NotFound:
+    description: The requested resource was not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 'Resource not found'
+  Success:
+    description: Successful response
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: 'Operation successful'

@@ -1,0 +1,45 @@
+summary: Get all contacts
+operationId: getAllContacts
+tags:
+  - Contacts
+description: This endpoint retrieves all contacts.
+security:
+  - bearerAuth: []
+responses:
+  200:
+    description: Contact successfully retrieved
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: 'Successfully found contact!'
+            data:
+              type: object
+              properties:
+                contactId:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                phoneNumber:
+                  type: string
+  404:
+    description: Contact not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: 'Contact not found'

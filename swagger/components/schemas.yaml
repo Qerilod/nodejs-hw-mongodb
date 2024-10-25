@@ -1,0 +1,23 @@
+components:
+schemas:
+  Contact:
+    type: object
+    properties:
+      id:
+        type: string
+        example: '617c1f77f8a5d243f06dfc25'
+      name:
+        type: string
+        example: 'John Doe'
+      phoneNumber:
+        type: string
+        example: '+123456789'
+      email:
+        type: string
+        example: 'john@example.com'
+      isFavourite:
+        type: boolean
+        example: true
+      contactType:
+        type: string
+        example: 'personal'

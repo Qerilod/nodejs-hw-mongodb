@@ -1,0 +1,43 @@
+summary: Create a new contact
+operationId: createContact
+tags:
+  - Contacts
+description: This endpoint allows you to create a new contact.
+security:
+  - bearerAuth: []
+requestBody:
+  description: Contact data to create
+  required: true
+  content:
+    application/json:
+      schema:
+        $ref: '#./components/schemas/contactInput'
+responses:
+  201:
+    description: Contact successfully created
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: 'Successfully created contact!'
+            data:
+              $ref: '#./components/schemas/contact'
+  400:
+    description: Invalid input
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: 'Invalid input data'
