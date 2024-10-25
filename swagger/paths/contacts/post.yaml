@@ -1,43 +1,64 @@
-summary: Create a new contact
-operationId: createContact
 tags:
   - Contacts
-description: This endpoint allows you to create a new contact.
+summary: Create contact
+operationId: createContact
+description: 'Create a contact with payload'
 security:
   - bearerAuth: []
 requestBody:
-  description: Contact data to create
-  required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
-        $ref: '#./components/schemas/contactInput'
+        type: object
+        required:
+          - name
+          - phoneNumber
+          - contactType
+        properties:
+          name:
+            description: "Contact's name"
+            type: string
+            example: 'John Doe'
+          phoneNumber:
+            description: "Contact's phone number"
+            type: string
+            example: '+380000000008'
+          email:
+            description: "Contact's email address"
+            type: string
+            example: dmytro3@example.com
+          isFavourite:
+            description: 'Is contact in favorite list'
+            type: boolean
+          contactType:
+            description: 'What type of contacts is it'
+            enum: ['work', 'home', 'personal']
+            type: string
+            example: 'work'
+          photo:
+            description: "Link to contacts's photo"
+            type: string
+            format: binary
 responses:
-  201:
-    description: Contact successfully created
+  '201':
+    description: Creates a student
     content:
       application/json:
         schema:
           type: object
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
               example: 201
             message:
               type: string
-              example: 'Successfully created contact!'
+              example: Successfully created a contact!
             data:
-              $ref: '#./components/schemas/contact'
-  400:
-    description: Invalid input
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            status:
-              type: integer
-              example: 400
-            message:
-              type: string
-              example: 'Invalid input data'
+              type: object
+              $ref: ../../components/schemas.yaml
+  '401':
+    $ref: ../../components/responses.yaml

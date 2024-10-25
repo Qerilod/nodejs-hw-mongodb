@@ -11,6 +11,7 @@ tags:
     description: Управління контактами
 servers:
   - url: http://localhost:3000
+  - url: https://nodejs-hw-mongodb-3-rqx5.onrender.com
 paths:
   /contacts:
     get:

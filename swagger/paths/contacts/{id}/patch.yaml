@@ -1,50 +1,69 @@
-summary: Update contact by ID
-operationId: updateContact
 tags:
   - Contacts
-description: This endpoint allows you to update contact information by ID.
+summary: Update contact
+operationId: updateontact
+description: 'Update a contact'
 security:
   - bearerAuth: []
 parameters:
-  - name: id
-    in: path
+  - in: path
+    name: id
     required: true
-    description: The ID of the contact to update
     schema:
       type: string
+      example: '65ca67e7ae7f10c88b598384'
 requestBody:
-  description: Contact data to update
-  required: true
   content:
-    application/json:
+    multipart/form-data:
       schema:
-        $ref: '#./components/schemas/ContactInput'
+        type: object
+        required:
+          - id
+        properties:
+          name:
+            description: "Contact's name"
+            type: string
+            example: 'John Doe'
+          phoneNumber:
+            description: "Contact's phone number"
+            type: string
+            example: '+380000000008'
+          email:
+            description: "Contact's email address"
+            type: string
+            example: dmytro3@example.com
+          isFavourite:
+            description: 'Is contact in favorite list'
+            type: boolean
+          contactType:
+            description: 'What type of contacts is it'
+            enum: ['work', 'home', 'personal']
+            type: string
+            example: 'work'
+          photo:
+            description: "Link to contacts's photo"
+            type: string
+            format: binary
 responses:
-  200:
-    description: Contact successfully updated
+  '200':
+    description: Update a student
     content:
-      application/json:
+      multipart/form-data:
         schema:
           type: object
+          required:
+            - status
+            - message
+            - data
           properties:
             status:
               type: integer
               example: 200
             message:
               type: string
-              example: 'Successfully updated contact!'
+              example: Successfully patched a contact!!
             data:
-              $ref: '#./components/schemas/Contact'
-  404:
-    description: Contact not found
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            status:
-              type: integer
-              example: 404
-            message:
-              type: string
-              example: 'Contact not found'
+              type: object
+              $ref: ../../../components/schemas.yaml
+  '404':
+    $ref: ../../../components/responses.yaml

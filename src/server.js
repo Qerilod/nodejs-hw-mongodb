@@ -12,7 +12,7 @@ import cookieParser from 'cookie-parser';
 import fs from 'node:fs';
 import swaggerUi from 'swagger-ui-express';
 const swagger = JSON.parse(
-  fs.readFileSync(new URL('../swagger.json', import.meta.url)),
+  fs.readFileSync(new URL('../docs/swagger.json', import.meta.url)),
 );
 const setupServer = () => {
   dotenv.config();

@@ -1,23 +1,39 @@
-components:
-schemas:
-  Contact:
-    type: object
-    properties:
-      id:
-        type: string
-        example: '617c1f77f8a5d243f06dfc25'
-      name:
-        type: string
-        example: 'John Doe'
-      phoneNumber:
-        type: string
-        example: '+123456789'
-      email:
-        type: string
-        example: 'john@example.com'
-      isFavourite:
-        type: boolean
-        example: true
-      contactType:
-        type: string
-        example: 'personal'
+type: object
+required:
+  - _id
+  - name
+  - phoneNumber
+  - contactType
+properties:
+  _id:
+    description: "Contact's id"
+    type: string
+    example: 65ca67e7aeg9d0an7c598384
+  name:
+    description: "Contact's name"
+    type: string
+    example: 'Mads Nilsen'
+  phoneNumber:
+    description: "Contact's phone number"
+    type: string
+    example: '+380049587008'
+  email:
+    description: "Contact's email address"
+    type: string
+    example: ivanko@example.com
+  isFavourite:
+    description: 'Is contact in favorite list'
+    type: boolean
+  contactType:
+    description: 'What type of contacts is it'
+    enum: ['work', 'home', 'personal']
+    type: string
+    example: 'work'
+  userId:
+    description: "Contacts's user id - who created this contact"
+    type: string
+    example: 65e4decdd0389gmd065d54af9
+  photo:
+    description: "Link to contacts's photo"
+    type: string
+    example: https://res.cloudinary.com/uqwgdu/image/upload/image.png
